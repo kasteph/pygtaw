@@ -68,16 +68,27 @@ langs = {
         }
 
 
-class Translate(object):
+class Client(object):
     def __init__(self, api_key):
-        self.payload = {'key': api_key}
-        self.url = 'https://www.googleapis.com/language/translate/v2?'
+        self._payload = {'key': api_key}
+        self._url = 'https://www.googleapis.com/language/translate/v2?'
+        self._response = None
 
-    def build_translation_request(self, target, query):
-        payload = dict(target=target, source=source, q=query, **self.payload)
+    def build_translation_request(self, target, source, query):
+        payload = dict(target=target, q=query, **self._payload)
+        if source:
+            payload['source'] = source
         return payload
 
-    def translate(self, target='Spanish', source=None, query=None):
-        payload = self.build_translation_request(langs[target], langs[source], query)
-        r = requests.get(self.url, params=payload)
-        return r.json()
+    def translate(self, target='Spanish', source, query):
+        payload = self.build_translation_request(langs[target], langs.get(source, None), query)
+        r = requests.get(self._url, params=payload)
+        self._response = r.json()['data']['translations'][0]
+
+    @property
+    def source_language_detected(self):
+        return self._response['detectedSourceLanguage']
+    
+    @property
+    def translated_text(self):
+        return self._response['translatedText']
