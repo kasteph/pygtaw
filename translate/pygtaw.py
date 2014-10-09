@@ -37,7 +37,7 @@ class Client(object):
         query: type <str>, required.
         target: type <str>, required, see README.md for info on which
         languages are supported.
-        source: type <str>, not required, Google Translate API can
+        source: type <str>, optional, Google Translate API can
         detect source language.
 
         """
@@ -46,9 +46,19 @@ class Client(object):
         return self.handle_response(requests.get(self._url, params=payload), source)
 
 class Translation(object):
+    """
+    response: Object returned from Client's translate request.
+    source: type <str>, language specified by user.
+    Has detected_source_language and translated_text properties.
+    """
     def __init__(self, response, source=None):
         self._response = response
         self._source = source
+
+    def get_source_language(self, detected_lang_code):
+        for language, code in langs.iteritems():
+            if code == detected_lang_code:
+                return language
 
     @property
     def detected_source_language(self):
@@ -57,7 +67,7 @@ class Translation(object):
         if the user does not provided a source language.
         """
         try:
-            return self._response['detectedSourceLanguage']
+            return self.get_source_language(self._response['detectedSourceLanguage'])
         except KeyError:
             return 'No detected source language, source provided by user: {}'.format(self._source)
     
