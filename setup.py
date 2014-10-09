@@ -11,6 +11,6 @@ setup(
     url="http://github.com/stephsamson/pygtaw",
     packages=['pygtaw'],
     package_data={'pygtaw': ['LICENSE', 'README.rst']},
-    long_description=open('README.rst').read()
+    long_description=open('README.rst').read(),
     install_requires=['requests>=2.0.0'],
 )
