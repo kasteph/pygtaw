@@ -9,9 +9,9 @@ usage
 -----
 Identify your api key and make a new Client object.
 ```
->>> from pygtaw import Client
+>>> from pygtaw import wrapper
 >>> api_key = 'ENTER_API_KEY'
->>> client = Client(api_key)
+>>> client = wrapper.Client(api_key)
 ```
 To make the translation request:
 ```
@@ -31,3 +31,6 @@ Hola
 >>> print translation.detected_source_language
 English
 ```
+tests
+-----
+Currently, tests are made by making requests to Google Translate API. To run the tests, make a `key` file in the `tests` folder and make sure it's added to `.gitignore`.
