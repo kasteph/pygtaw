@@ -1,6 +1,5 @@
 import unittest
-import responses
-from translate import pygtaw
+from pygtaw import wrapper
 
 class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
 
@@ -9,7 +8,7 @@ class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
 
     def make_client(self):
         api_key = open('key').read()
-        self.client = pygtaw.Client(api_key)
+        self.client = wrapper.Client(api_key)
 
     def test_get_translated_text(self):
         query = self.client.translate('Hola', 'English')

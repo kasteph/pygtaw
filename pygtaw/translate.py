@@ -32,7 +32,7 @@ class Client(object):
         self._response = response.json()['data']['translations'][0]
         return Translation(self._response, source)
 
-    def translate(self, query, target='Spanish', source=None):
+    def translate(self, query, target, source=None):
         """
         query: type <str>, required.
         target: type <str>, required, see README.md for info on which
@@ -41,9 +41,12 @@ class Client(object):
         detect source language.
 
         """
-        query.decode(encoding='utf-8')
-        payload = self.build_payload(query, langs[target], langs.get(source, None))
-        return self.handle_response(requests.get(self._url, params=payload), source)
+        try:
+            query.decode(encoding='utf-8')
+            payload = self.build_payload(query, langs[target], langs.get(source, None))
+            return self.handle_response(requests.get(self._url, params=payload), source)
+        except TypeError:
+            return '[query] and [target] parameters are required.'
 
 class Translation(object):
     """

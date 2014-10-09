@@ -1,2 +1,5 @@
 *.pyc
 tests/key
+build
+dist
+pygtaw.egg-info
