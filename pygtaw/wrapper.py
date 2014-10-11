@@ -3,12 +3,12 @@ from langs import langs
 
 
 class Client(object):
-    """
-    api_key: type <str>, see https://cloud.google.com/translate
-    for more information on obtaining an API key.
-    Loads the client interface for Google Translate API.
-    """
     def __init__(self, api_key):
+        """
+        api_key: type <str>, see https://cloud.google.com/translate
+        for more information on obtaining an API key.
+        Loads the client interface for Google Translate API.
+        """
         self._payload = {'key': api_key}
         self._url = 'https://www.googleapis.com/language/translate/v2?'
         self._source = None
@@ -49,12 +49,12 @@ class Client(object):
             return '[query] and [target] parameters are required.'
 
 class Translation(object):
-    """
-    response: Object returned from Client's translate request.
-    source: type <str>, language specified by user.
-    Has detected_source_language and translated_text properties.
-    """
     def __init__(self, response, source=None):
+        """
+        response: Object returned from Client's translate request.
+        source: type <str>, language specified by user.
+        Has detected_source_language and translated_text properties.
+        """
         self._response = response
         self._source = source
 

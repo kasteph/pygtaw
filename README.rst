@@ -12,6 +12,8 @@ The full list of `supported languages`_.
 
 Usage
 -----
+To install: ``pip install pygtaw``.
+
 Identify your api key and make a new Client object.
 
 .. code-block:: python
