@@ -42,7 +42,6 @@ class Client(object):
 
         """
         try:
-            query = query.decode(encoding='utf-8')
             payload = self.build_payload(query, langs[target], langs.get(source, None))
             return self.handle_response(requests.get(self._url, params=payload), source)
         except TypeError:
