@@ -3,3 +3,4 @@ tests/key
 build
 dist
 pygtaw.egg-info
+pygtaw.sublime-project

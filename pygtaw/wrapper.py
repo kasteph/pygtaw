@@ -9,7 +9,7 @@ class Client(object):
         for more information on obtaining an API key.
         Loads the client interface for Google Translate API.
         """
-        self._payload = {'key': api_key}
+        self._key = api_key
         self._url = 'https://www.googleapis.com/language/translate/v2?'
         self._source = None
 
@@ -18,7 +18,7 @@ class Client(object):
         Builds a dictionary of parameters as payload
         for the HTTP request.
         """
-        payload = dict(q=query, target=target, **self._payload)
+        payload = dict(q=query, target=target, api_key=self._key)
         if source:
             payload['source'] = source
         return payload
