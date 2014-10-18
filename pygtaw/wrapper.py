@@ -11,26 +11,30 @@ class Client(object):
         """
         self._key = api_key
         self._url = 'https://www.googleapis.com/language/translate/v2?'
-        self._source = None
 
-    def build_payload(self, query, target, source):
+    def _build_payload(self, query, target, source):
         """
         Builds a dictionary of parameters as payload
         for the HTTP request.
         """
-        payload = dict(q=query, target=target, api_key=self._key)
+        payload = dict(q=query, target=target, key=self._key)
         if source:
             payload['source'] = source
         return payload
 
-    def handle_response(self, response, source):
+    def _handle_response(self, response):
         """
         response: Object returned from requests, presumably
         passed from self.translate().
         Returns a Translation object.
         """
-        self._response = response.json()['data']['translations'][0]
-        return Translation(self._response, source)
+        try:
+            response = response.json()['data']['translations'][0]
+            return Translation(response, self._source)
+        # when 'data' cannot be retrieved possibly due to a 403
+        except KeyError:
+            return 'Something went wrong; either your limit has exceeded or your connection is bad.'
+
 
     def translate(self, query, target, source=None):
         """
@@ -42,8 +46,10 @@ class Client(object):
 
         """
         try:
-            payload = self.build_payload(query, langs[target], langs.get(source, None))
-            return self.handle_response(requests.get(self._url, params=payload), source)
+            self._source = source
+            payload = self._build_payload(query, langs[target], langs.get(self._source, None))
+            response = requests.get(self._url, params=payload)
+            return self._handle_response(response)
         except TypeError:
             return '[query] and [target] parameters are required.'
 
@@ -57,7 +63,7 @@ class Translation(object):
         self._response = response
         self._source = source
 
-    def get_source_language(self, detected_lang_code):
+    def _get_source_language(self, detected_lang_code):
         for language, code in langs.iteritems():
             if code == detected_lang_code:
                 return language
@@ -69,7 +75,7 @@ class Translation(object):
         if the user does not provided a source language.
         """
         try:
-            return self.get_source_language(self._response['detectedSourceLanguage'])
+            return self._get_source_language(self._response['detectedSourceLanguage'])
         except KeyError:
             return 'No detected source language, source provided by user: {}'.format(self._source)
     
