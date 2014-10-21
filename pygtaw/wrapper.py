@@ -17,7 +17,11 @@ class Client(object):
         Builds a dictionary of parameters as payload
         for the HTTP request.
         """
-        payload = dict(q=query, target=target, key=self._key)
+        payload = {
+            'q': query,
+            'target': target,
+            'key': self._key
+        }
         if source:
             payload['source'] = source
         return payload
@@ -29,14 +33,16 @@ class Client(object):
         Returns a Translation object.
         """
         if response.status_code in [400, 402, 404, 500]:
-            return 'Something went wrong: {}, {}'.format(response.status_code, response.json()['error']['message'])
+            self._exceptions(response)
         try:
             response = response.json()['data']['translations'][0]
             return Translation(response, self._source)
         # when 'data' cannot be retrieved possibly due to a 403
         except KeyError:
-            return 'Something went wrong; either your limit has exceeded or your connection is bad.'
+            self._exceptions(response)
 
+    def _exceptions(self, response):
+        raise Exception(response.status_code, response.json()['error']['message'])
 
     def translate(self, query, target, source=None):
         """

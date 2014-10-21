@@ -25,9 +25,14 @@ class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
     def test_try_get_detected_source_lang(self):
         query = self.client.translate('El mundo', target='English', source='Spanish')
         self.assertEqual(query.detected_source_language,
-            'No detected source language, source provided by user: Spanish')
+            'No detected source language, source provided by user: Spanish')        
+
+    def test_invalid_language(self):
+        self.assertRaises(Exception, self.client.translate, 'Invalid', 'Klingon')
 
     def tearDown(self):
         self.make_client()
 
-
+    def test_incorrect_key(self):
+        self.client = wrapper.Client('foo')
+        self.assertRaises(Exception, self.client.translate, 'Attempt', 'Spanish')
