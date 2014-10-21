@@ -28,6 +28,8 @@ class Client(object):
         passed from self.translate().
         Returns a Translation object.
         """
+        if response.status_code in [400, 402, 404, 500]:
+            return 'Something went wrong: {}, {}'.format(response.status_code, response.json()['error']['message'])
         try:
             response = response.json()['data']['translations'][0]
             return Translation(response, self._source)
