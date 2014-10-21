@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pygtaw",
-    version="0.0.7",
+    version="0.0.8",
     author="Steph Samson",
     author_email="sdvsamson@gmail.com",
     description=("A tiny Google Translate API wrapper written in Python."),
