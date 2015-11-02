@@ -1,6 +1,7 @@
 import unittest
 import os
-from pygtaw import wrapper
+import pygtaw
+
 
 class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
 
@@ -8,11 +9,11 @@ class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
         self.make_client()
 
     def make_client(self):
-        self.client = wrapper.Client(os.environ['TRANSLATE_KEY'])
+        self.client = pygtaw.Client(os.environ['TRANSLATE_KEY'])
 
     def test_get_translated_text(self):
         query = self.client.translate('Hola', 'English')
-        self.assertEqual(query.translated_text, 'Hi')
+        self.assertEqual(query.translated_text, 'Hello')
 
     def test_get_detected_source_lang(self):
         query = self.client.translate('Hello', 'German')
@@ -34,5 +35,5 @@ class TestPyGoogleTranslateAPIWrapper(unittest.TestCase):
         self.make_client()
 
     def test_incorrect_key(self):
-        self.client = wrapper.Client('foo')
+        self.client = pygtaw.Client('foo')
         self.assertRaises(Exception, self.client.translate, 'Attempt', 'Spanish')

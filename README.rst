@@ -18,9 +18,9 @@ Identify your api key and make a new Client object.
 
 .. code-block:: python
 
-    >>> from pygtaw import wrapper
+    >>> import pygtaw
     >>> api_key = 'ENTER_API_KEY'
-    >>> client = wrapper.Client(api_key)
+    >>> client = pygtaw.Client(api_key)
 
 To make the translation request:
 
